@@ -21,7 +21,7 @@ export class AddClientComponent implements OnInit {
     balance: 0
   };
 
-  disabledBalanceOnAdd: boolean = true;
+  disabledBalanceOnAdd: boolean = JSON.parse(localStorage.getItem('settings')).disableBalanceOnAdd;
 
   @ViewChild('clientForm') form: any;
 

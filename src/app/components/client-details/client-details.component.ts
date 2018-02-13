@@ -19,13 +19,16 @@ import { Router } from "@angular/router";
 export class ClientDetailsComponent implements OnInit {
 
   client: Client = {
+    id: '',
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    balance: 0
+    balance: 0,
   };
-  currentRouteId: string;
+  id: string;
+  hasBalance: boolean = false;
+  showBalanceUpdateInput: boolean = false;
 
   constructor(
     private clientServices: ClientService,
@@ -35,23 +38,40 @@ export class ClientDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.currentRouteId = this.route.snapshot.params.id;
+    this.id = this.route.snapshot.params['id'];
 
-    this.clientServices.getClient(this.currentRouteId).subscribe( client => {
-      this.client = client;
-    } )
+    this.clientServices.getClient(this.id).subscribe( client => {
+      if (this.client) {
+        if (client.balance > 0) {
+          this.hasBalance = true;
+        }
+        this.client = client;
+      }
+    } );
 
   }
 
-  deleteClient( client: Client ) {
-    this.clientServices.deleteClient(client);
+  deleteClient() {
+    if (confirm('Are you sure?')) {
+      this.clientServices.deleteClient(this.client);
+      // show message success
+      this.flashMessages.show('Client deleted with success', {
+        cssClass: 'alert-success',
+        timeout: 4000
+      });
+      //Redirect
+      this.router.navigate(['/']);
+    }
+  }
+
+  updateBalance() {
+    this.clientServices.updateClient(this.client);
     // show message success
-    this.flashMessages.show('Client deleted with success', {
+    this.flashMessages.show('Balance updated', {
       cssClass: 'alert-success',
       timeout: 4000
     });
-    //Redirect
-    this.router.navigate(['/'])
-  };
+    this.showBalanceUpdateInput = false;
+  }
 
 }
