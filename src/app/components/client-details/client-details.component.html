@@ -40,9 +40,10 @@
                      name="balance"
                      class="form-control mr-2"
                      [(ngModel)]="client.balance"
+                     [disabled]="disableBalanceOnEdit"
               >
               <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary" [disabled]="disableBalanceOnEdit">Update</button>
               </span>
             </div>
           </form>

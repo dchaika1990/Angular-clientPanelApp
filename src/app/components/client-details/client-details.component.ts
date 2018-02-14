@@ -4,6 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 //Services
 import { ClientService } from "../../services/client.service";
 import { FlashMessagesService } from "angular2-flash-messages";
+import { SettingsService } from "../../services/settings.service";
 
 //Modules
 import { Client } from "../../models/client";
@@ -17,6 +18,8 @@ import { Router } from "@angular/router";
   styleUrls: ['./client-details.component.css']
 })
 export class ClientDetailsComponent implements OnInit {
+
+  disableBalanceOnEdit: boolean;
 
   client: Client = {
     id: '',
@@ -34,7 +37,8 @@ export class ClientDetailsComponent implements OnInit {
     private clientServices: ClientService,
     public route: ActivatedRoute,
     public router: Router,
-    public  flashMessages: FlashMessagesService
+    public  flashMessages: FlashMessagesService,
+    public settingsService: SettingsService
   ) { }
 
   ngOnInit() {
@@ -48,7 +52,7 @@ export class ClientDetailsComponent implements OnInit {
         this.client = client;
       }
     } );
-
+    this.disableBalanceOnEdit = this.settingsService.getSettings().disableBalanceOnEdit;
   }
 
   deleteClient() {

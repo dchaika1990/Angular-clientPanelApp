@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 //Services
 import { FlashMessagesService } from "angular2-flash-messages";
 import { ClientService } from "../../services/client.service";
+import { SettingsService } from "../../services/settings.service";
 
 //Module
 import { Client } from "../../models/client";
@@ -24,13 +25,14 @@ export class EditClientComponent implements OnInit {
   };
   id: string;
 
-  disabledBalanceOnAdd: boolean = JSON.parse(localStorage.getItem('settings')).disableBalanceOnAdd;
+  disableBalanceOnEdit: boolean;
 
   constructor(
     private clientServices: ClientService,
     public route: ActivatedRoute,
     public router: Router,
-    public  flashMessages: FlashMessagesService
+    public  flashMessages: FlashMessagesService,
+    public settingsService: SettingsService
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,7 @@ export class EditClientComponent implements OnInit {
         this.client = client;
       }
     } );
+    this.disableBalanceOnEdit = this.settingsService.getSettings().disableBalanceOnEdit;
   }
 
   onSubmit(form) {
